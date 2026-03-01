@@ -41,13 +41,15 @@ export const handler: Handler = async (event) => {
     // Handle the checkout.session.completed event
     if (stripeEvent.type === 'checkout.session.completed') {
         const session = stripeEvent.data.object as Stripe.Checkout.Session;
+        console.log('Processing session:', session.id);
 
         const metadata = session.metadata || {};
         const customerEmail = session.customer_details?.email || 'Unknown Email';
         const customerName = session.customer_details?.name || 'Unknown Name';
 
+        // 1. Log to Supabase Database
         try {
-            // 1. Log to Supabase Database
+            console.log('Attempting Supabase insert for:', customerEmail);
             const { error: dbError } = await supabase
                 .from('orders')
                 .insert({
@@ -63,11 +65,17 @@ export const handler: Handler = async (event) => {
                 });
 
             if (dbError) {
-                console.error('Supabase Insert Error:', dbError);
-                throw new Error('Failed to save order to database.');
+                console.error('Supabase DB Error Details:', JSON.stringify(dbError, null, 2));
+            } else {
+                console.log('Supabase insert success!');
             }
+        } catch (dbErr) {
+            console.error('Unexpected Supabase Error:', dbErr);
+        }
 
-            // 2. Send Notification Email via Resend
+        // 2. Send Notification Email via Resend
+        try {
+            console.log('Attempting Resend email to:', 'arifanyusuf9@gmail.com');
             const emailHtml = `
         <h1>New Custom Order from Sevenmark!</h1>
         <p><strong>Customer:</strong> ${customerName} (${customerEmail})</p>
@@ -81,18 +89,15 @@ export const handler: Handler = async (event) => {
         </ul>
       `;
 
-            await resend.emails.send({
-                // Note: Resend requires a verified domain to send FROM. We use their test 'onboarding' email by default
+            const emailResponse = await resend.emails.send({
                 from: 'Sevenmark Orders <onboarding@resend.dev>',
-                to: ['arifanyusuf9@gmail.com'], // Updated notification email
+                to: ['arifanyusuf9@gmail.com'],
                 subject: `[NEW ORDER] ${metadata.productName} for ${customerName}`,
                 html: emailHtml,
             });
-
-            console.log('Order processed successfully!');
-        } catch (error) {
-            console.error('Error processing successful checkout:', error);
-            return { statusCode: 500, body: 'Error processing order' };
+            console.log('Resend Response:', JSON.stringify(emailResponse, null, 2));
+        } catch (emailErr) {
+            console.error('Resend Email Error:', emailErr);
         }
     }
 
