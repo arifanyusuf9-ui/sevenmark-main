@@ -84,7 +84,7 @@ export const handler: Handler = async (event) => {
             await resend.emails.send({
                 // Note: Resend requires a verified domain to send FROM. We use their test 'onboarding' email by default
                 from: 'Sevenmark Orders <onboarding@resend.dev>',
-                to: ['rifanaseli11@gmail.com'], // Or however you wish to notify
+                to: ['arifanyusuf9@gmail.com'], // Updated notification email
                 subject: `[NEW ORDER] ${metadata.productName} for ${customerName}`,
                 html: emailHtml,
             });
