@@ -23,12 +23,14 @@ export const AntiGravityCanvas = () => {
     useEffect(() => {
         let isCancelled = false;
         const loadImages = async () => {
+            const isMobile = window.innerWidth < 768;
+            const skipFactor = isMobile ? 2 : 1; // Load every 2nd frame on mobile to save memory and network
             const loadedImages = new Array(FRAME_COUNT);
 
-            const promises = Array.from({ length: FRAME_COUNT }).map((_, i) => {
-                return new Promise((resolve) => {
+            const promises = [];
+            for (let i = 0; i < FRAME_COUNT; i += skipFactor) {
+                promises.push(new Promise((resolve) => {
                     const img = new Image();
-                    // In Vite, items in public/ are available at the root path
                     img.src = `/sequence/frame_${String(i).padStart(3, '0')}_delay-0.041s.jpg`;
                     img.onload = () => {
                         if (isCancelled) return resolve(null);
@@ -39,8 +41,8 @@ export const AntiGravityCanvas = () => {
                         console.error(`Failed to load frame ${i} at ${img.src}`);
                         resolve(null);
                     };
-                });
-            });
+                }));
+            }
 
             await Promise.all(promises);
             if (!isCancelled) {
@@ -75,10 +77,12 @@ export const AntiGravityCanvas = () => {
             const ANIMATION_END_PERCENTAGE = 0.9;
             const mappedProgress = Math.min(1, progress / ANIMATION_END_PERCENTAGE);
 
-            const frameIndex = Math.min(
-                FRAME_COUNT - 1,
-                Math.floor(mappedProgress * FRAME_COUNT)
-            );
+            const rawFrameIndex = Math.floor(mappedProgress * FRAME_COUNT);
+            const isMobile = window.innerWidth < 768;
+            const skipFactor = isMobile ? 2 : 1;
+            // Snap to the nearest loaded frame based on skipFactor
+            const targetIndex = rawFrameIndex - (rawFrameIndex % skipFactor);
+            const frameIndex = Math.min(FRAME_COUNT - 1, targetIndex);
 
             if (context && images[frameIndex]) {
                 const img = images[frameIndex];

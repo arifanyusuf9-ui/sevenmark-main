@@ -8,6 +8,8 @@ import { getApiUrl } from "@/lib/utils";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import ShaderBackground from "@/components/ui/shader-background";
+import { ProductPreview } from "@/components/ProductPreview";
+import { supabase } from "@/lib/supabase";
 
 const products = [
   {
@@ -67,6 +69,7 @@ const Shop = () => {
   const [engraving, setEngraving] = useState("Your Name");
   const [ribbon, setRibbon] = useState("Gold");
   const [isCheckingOut, setIsCheckingOut] = useState(false);
+  const [productBadges, setProductBadges] = useState<Record<string, string>>({});
 
   const woods = ["Walnut", "Mahogany", "Oak"];
   const ribbons = ["Gold", "Black", "Navy"];
@@ -78,6 +81,37 @@ const Shop = () => {
         description: "Your session was canceled. Your order has not been placed.",
       });
     }
+
+    const fetchBadges = async () => {
+      try {
+        const { data, error } = await supabase
+          .from('orders')
+          .select('product_name')
+          .eq('status', 'paid');
+
+        if (error || !data) return;
+
+        const counts = data.reduce((acc: any, order: any) => {
+          if (order.product_name) {
+            acc[order.product_name] = (acc[order.product_name] || 0) + 1;
+          }
+          return acc;
+        }, {});
+
+        const sorted = Object.entries(counts).sort((a: any, b: any) => b[1] - a[1]);
+        const newBadges: Record<string, string> = {};
+
+        if (sorted.length > 0) newBadges[sorted[0][0] as string] = "Bestseller";
+        if (sorted.length > 1) newBadges[sorted[1][0] as string] = "Trending";
+        if (sorted.length > 2) newBadges[sorted[2][0] as string] = "Trending";
+
+        setProductBadges(newBadges);
+      } catch (err) {
+        console.error("Failed to fetch order stats for badges:", err);
+      }
+    };
+
+    fetchBadges();
   }, [searchParams]);
 
   const handleCheckout = async () => {
@@ -254,14 +288,14 @@ const Shop = () => {
                       loading="lazy"
                     />
                     {/* Badge */}
-                    {p.badge && (
-                      <span className={`absolute left-3 top-3 rounded-sm px-3 py-1 font-body text-[10px] font-semibold uppercase tracking-widest ${p.badge === "Limited"
+                    {(productBadges[p.name] || p.badge) && (
+                      <span className={`absolute left-3 top-3 rounded-sm px-3 py-1 font-body text-[10px] font-semibold uppercase tracking-widest ${(productBadges[p.name] || p.badge) === "Limited"
                         ? "bg-destructive text-destructive-foreground"
-                        : p.badge === "New"
+                        : (productBadges[p.name] || p.badge) === "New"
                           ? "bg-accent text-accent-foreground"
                           : "bg-primary text-primary-foreground"
                         }`}>
-                        {p.badge}
+                        {productBadges[p.name] || p.badge}
                       </span>
                     )}
                     {/* Hover overlay */}
@@ -336,8 +370,8 @@ const Shop = () => {
 
               <div className="grid md:grid-cols-2">
                 {/* Image Side */}
-                <div className="bg-muted p-8 flex items-center justify-center">
-                  <img src={selectedProduct.image} alt={selectedProduct.name} className="max-h-80 object-contain drop-shadow-2xl" />
+                <div className="bg-muted p-8 flex items-center justify-center overflow-hidden">
+                  <ProductPreview wood={wood} ribbon={ribbon} engraving={engraving} className="scale-90" />
                 </div>
 
                 {/* Customization Form */}

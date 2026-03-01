@@ -6,6 +6,7 @@ import CollectionsSection from "@/components/CollectionsSection";
 import CustomizeSection from "@/components/CustomizeSection";
 import TestimonialsSection from "@/components/TestimonialsSection";
 import CraftStorySection from "@/components/CraftStorySection";
+import GravityStorySection from "@/components/GravityStorySection";
 import StatsBar from "@/components/StatsBar";
 import NewsletterSection from "@/components/NewsletterSection";
 import Footer from "@/components/Footer";
@@ -21,6 +22,7 @@ const Index = () => {
       <CustomizeSection />
       <TestimonialsSection />
       <CraftStorySection />
+      <GravityStorySection />
       <StatsBar />
       <NewsletterSection />
       <Footer />
