@@ -4,6 +4,7 @@ interface ProductPreviewProps {
     wood: string;
     ribbon: string;
     engraving: string;
+    finish: 'gold' | 'silver';
     className?: string;
     size?: 'default' | 'large';
 }
@@ -24,15 +25,20 @@ export const ProductPreview = ({
     wood,
     ribbon,
     engraving,
+    finish,
     className = "",
     size = 'default'
 }: ProductPreviewProps) => {
     const dimensions = size === 'large' ? "h-96 w-[500px]" : "h-72 w-96";
     const fontSize = size === 'large' ? "text-2xl" : "text-lg";
 
+    // Hardware color logic
+    const hardwareColor = finish === 'gold' ? "hsl(43 52% 54%)" : "hsl(202 10% 80%)";
+    const hardwareOpacity = finish === 'gold' ? "40%" : "60%";
+
     return (
         <motion.div
-            className={`relative flex items-center justify-center rounded-sm shadow-2xl overflow-hidden ${dimensions} ${className}`}
+            className={`relative flex items-center justify-center shadow-2xl overflow-hidden ${dimensions} ${className}`}
             animate={{ backgroundColor: woodColors[wood] || woodColors.Walnut }}
             transition={{ duration: 0.6 }}
             whileHover={{ rotateY: 5, rotateX: -3, scale: 1.02 }}
@@ -42,9 +48,9 @@ export const ProductPreview = ({
             <div className="absolute inset-0 opacity-20"
                 style={{ background: "repeating-linear-gradient(90deg, transparent, transparent 2px, hsl(0 0% 0% / 0.1) 2px, hsl(0 0% 0% / 0.1) 4px)" }}
             />
-            {/* Ribbon */}
+            {/* Horizontal Ribbon */}
             <motion.div
-                className="absolute left-1/2 top-0 h-full w-4 -translate-x-1/2"
+                className="absolute top-1/2 left-0 w-full h-4 -translate-y-1/2 z-0"
                 animate={{ backgroundColor: ribbonColors[ribbon] || ribbonColors.Gold }}
                 transition={{ duration: 0.5 }}
             />
@@ -56,25 +62,40 @@ export const ProductPreview = ({
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -10 }}
                     transition={{ duration: 0.3 }}
-                    className={`relative z-10 font-heading font-light italic tracking-wider text-foreground/80 ${fontSize}`}
+                    className={`absolute bottom-10 left-0 w-full text-center z-10 font-heading font-light italic tracking-wider text-foreground/80 ${fontSize}`}
                 >
                     {engraving || "Your Name"}
                 </motion.p>
             </AnimatePresence>
-            {/* Gold accent line */}
-            <div className="absolute bottom-6 left-1/2 h-px w-24 -translate-x-1/2 bg-primary/40" />
+            {/* Accent line */}
+            <div
+                className="absolute bottom-6 left-1/2 h-px w-24 -translate-x-1/2"
+                style={{ backgroundColor: hardwareColor, opacity: 0.4 }}
+            />
             {/* Corner accents */}
-            <div className="absolute top-3 left-3 h-4 w-4 border-l border-t border-primary/30" />
-            <div className="absolute top-3 right-3 h-4 w-4 border-r border-t border-primary/30" />
-            <div className="absolute bottom-3 left-3 h-4 w-4 border-l border-b border-primary/30" />
-            <div className="absolute bottom-3 right-3 h-4 w-4 border-r border-b border-primary/30" />
+            <div className="absolute top-3 left-3 h-4 w-4 border-l border-t" style={{ borderColor: hardwareColor, opacity: 0.3 }} />
+            <div className="absolute top-3 right-3 h-4 w-4 border-r border-t" style={{ borderColor: hardwareColor, opacity: 0.3 }} />
+            <div className="absolute bottom-3 left-3 h-4 w-4 border-l border-b" style={{ borderColor: hardwareColor, opacity: 0.3 }} />
+            <div className="absolute bottom-3 right-3 h-4 w-4 border-r border-b" style={{ borderColor: hardwareColor, opacity: 0.3 }} />
+
+            {/* Brand Mark */}
+            <div className="absolute bottom-4 right-4 z-20 overflow-hidden rounded-sm opacity-60 transition-opacity hover:opacity-90">
+                <img
+                    src="/logo.jpg"
+                    alt="Brand Mark"
+                    className="h-6 w-auto object-contain brightness-125"
+                    style={{ filter: finish === 'gold' ? 'none' : 'grayscale(1) brightness(1.5)' }}
+                />
+            </div>
+
             {/* Ambient glow */}
             <motion.div
                 className="absolute inset-0 pointer-events-none"
                 animate={{ opacity: [0, 0.1, 0] }}
                 transition={{ duration: 3, repeat: Infinity }}
-                style={{ background: "radial-gradient(circle at 30% 30%, hsl(43 52% 54% / 0.2), transparent 60%)" }}
+                style={{ background: `radial-gradient(circle at 30% 30%, ${hardwareColor}, transparent 60%)`, opacity: 0.2 }}
             />
         </motion.div>
     );
 };
+

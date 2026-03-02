@@ -7,7 +7,8 @@ const navLinks = [
   { label: "Home", href: "/" },
   { label: "Shop", href: "/shop" },
   { label: "Collections", href: "/#collections" },
-  { label: "About Us", href: "/#about" },
+  { label: "About Us", href: "/about" },
+  { label: "Corporate", href: "/admin" },
 ];
 
 const Navbar = () => {
@@ -43,36 +44,26 @@ const Navbar = () => {
     );
   };
 
+  const isHomePage = location.pathname === "/";
+  const showNavbar = true;
+
   return (
     <motion.nav
       initial={{ y: -100 }}
-      animate={{ y: 0 }}
+      animate={{
+        y: showNavbar ? 0 : -100,
+        opacity: showNavbar ? 1 : 0
+      }}
       transition={{ duration: 0.8, ease: [0.25, 0.46, 0.45, 0.94] }}
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
-        scrolled ? "glass-nav" : "bg-transparent"
-      }`}
+      className={`fixed top-0 left-0 right-0 z-[60] transition-all duration-500 ${scrolled ? "glass-nav" : "bg-transparent"
+        }`}
     >
       <div className="container mx-auto flex items-center justify-between px-6 py-4">
-        <Link to="/" className="group relative">
-          <motion.span
-            className="font-heading text-2xl font-semibold tracking-[0.3em] text-foreground"
-            whileHover={{ letterSpacing: "0.4em" }}
-            transition={{ duration: 0.4 }}
-          >
-            SEVEN
-          </motion.span>
-          <motion.span
-            className="font-heading text-2xl font-semibold tracking-[0.3em] text-gradient-gold"
-            whileHover={{ letterSpacing: "0.4em" }}
-            transition={{ duration: 0.4 }}
-          >
-            MARK
-          </motion.span>
-          <motion.div
-            className="absolute -bottom-1 left-0 h-px bg-primary"
-            initial={{ width: "0%" }}
-            whileHover={{ width: "100%" }}
-            transition={{ duration: 0.4 }}
+        <Link to="/" className="group flex items-center gap-2">
+          <img
+            src="/logo.jpg"
+            alt="SEVENMARK"
+            className="h-8 w-auto object-contain transition-transform duration-300 group-hover:scale-105"
           />
         </Link>
 
@@ -95,7 +86,7 @@ const Navbar = () => {
           >
             <Link
               to="/#customize"
-              className="ml-2 relative overflow-hidden rounded-sm border border-primary bg-primary px-5 py-2 font-body text-xs font-semibold uppercase tracking-widest text-primary-foreground transition-all duration-300 hover:bg-transparent hover:text-primary gold-glow-hover"
+              className="ml-2 relative overflow-hidden rounded-sm border border-primary bg-primary px-5 py-2 font-body text-xs font-medium uppercase tracking-[0.2em] text-primary-foreground transition-all duration-300 hover:bg-transparent hover:text-primary gold-glow-hover"
             >
               Customize
             </Link>

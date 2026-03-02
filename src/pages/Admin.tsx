@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Lock, Package, DollarSign, Award, Scissors } from "lucide-react";
 import Navbar from "@/components/Navbar";
+import { TextEffect } from "@/components/ui/text-effect";
 import { supabase } from "@/lib/supabase";
 
 type Order = {
@@ -128,15 +129,42 @@ const Admin = () => {
                 <motion.div
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
-                    className="mb-12 flex flex-col md:flex-row md:items-end justify-between gap-4"
+                    className="mb-16 flex flex-col items-center text-center space-y-8"
                 >
-                    <div>
-                        <h1 className="font-heading text-4xl text-gradient-gold">Executive Overview</h1>
-                        <p className="font-body text-muted-foreground mt-2">Real-time order and customization analytics</p>
+                    <div className="space-y-2">
+                        <h1 className="font-heading text-4xl md:text-5xl text-gradient-gold uppercase tracking-tighter">
+                            <TextEffect text="Executive Overview" />
+                        </h1>
                     </div>
-                    <button onClick={fetchOrders} className="font-body text-xs text-primary uppercase tracking-widest hover:underline transition-all">
-                        Refresh Data
-                    </button>
+
+                    <div className="w-full max-w-4xl aspect-[21/9] relative overflow-hidden rounded-sm border border-primary/20 shadow-2xl group">
+                        <video
+                            autoPlay muted loop playsInline
+                            className="h-full w-full object-cover brightness-75 group-hover:brightness-100 transition-all duration-1000"
+                            preload="metadata"
+                        >
+                            <source src="/hero-product.mp4" type="video/mp4" />
+                        </video>
+                        <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-background/50 pointer-events-none" />
+                        <div className="absolute inset-0 border border-primary/10 rounded-sm pointer-events-none" />
+                    </div>
+
+                    <div className="space-y-6">
+                        <TextEffect
+                            text="Real-time order and customization analytics"
+                            className="font-body text-muted-foreground tracking-[0.2em] uppercase text-sm"
+                            stagger={0.01}
+                        />
+
+                        <div>
+                            <button
+                                onClick={fetchOrders}
+                                className="font-body text-[10px] text-primary uppercase tracking-[0.3em] hover:text-white transition-all border border-primary/30 px-6 py-2 rounded-full hover:bg-primary/20 gold-glow-hover"
+                            >
+                                Refresh Data
+                            </button>
+                        </div>
+                    </div>
                 </motion.div>
 
                 {/* Analytics Cards */}

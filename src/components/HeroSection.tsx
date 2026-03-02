@@ -52,7 +52,7 @@ const HeroSection = () => {
 
         {/* Multi-layer overlays */}
         <div className="hero-overlay absolute inset-0 z-10" />
-        <div className="absolute inset-0 z-10 pointer-events-none mix-blend-multiply" style={{ background: "radial-gradient(ellipse at center, transparent 30%, hsl(0 0% 4% / 0.9) 100%)" }} />
+        <div className="absolute inset-0 z-10 pointer-events-none mix-blend-multiply" style={{ background: "radial-gradient(ellipse at center, transparent 30%, hsl(300 6% 3% / 0.9) 100%)" }} />
 
         {/* Animated geometric grid */}
         <div className="absolute inset-0 z-10 overflow-hidden pointer-events-none opacity-10">

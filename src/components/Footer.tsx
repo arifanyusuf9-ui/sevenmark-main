@@ -23,8 +23,12 @@ const Footer = () => {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
         >
-          <Link to="/" className="mb-2 inline-block font-heading text-2xl font-semibold tracking-[0.3em] text-foreground">
-            SEVEN<span className="text-gradient-gold">MARK</span>
+          <Link to="/" className="mb-2 inline-block">
+            <img
+              src="/logo.jpg"
+              alt="SEVENMARK"
+              className="h-6 w-auto object-contain transition-transform duration-300 hover:scale-105"
+            />
           </Link>
           <p className="mb-8 font-body text-xs text-muted-foreground">
             Crafted with intention.

@@ -1,5 +1,5 @@
 import Navbar from "@/components/Navbar";
-import HeroSection from "@/components/HeroSection";
+import CinematicHero from "@/components/CinematicHero";
 import BrandStrip from "@/components/BrandStrip";
 import FeaturesSection from "@/components/FeaturesSection";
 import CollectionsSection from "@/components/CollectionsSection";
@@ -15,7 +15,7 @@ const Index = () => {
   return (
     <main className="min-h-screen bg-background">
       <Navbar />
-      <HeroSection />
+      <CinematicHero />
       <BrandStrip />
       <FeaturesSection />
       <CollectionsSection />

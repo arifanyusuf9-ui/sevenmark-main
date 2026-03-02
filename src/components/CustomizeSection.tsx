@@ -3,38 +3,38 @@ import { motion, AnimatePresence } from "framer-motion";
 import { loadStripe } from '@stripe/stripe-js';
 import { getApiUrl } from "@/lib/utils";
 import { ProductPreview } from "./ProductPreview";
+import { GLSLHills } from "./ui/glsl-hills";
 
 const woods = ["Walnut", "Mahogany", "Oak"];
 const ribbons = ["Gold", "Black", "Navy"];
+const finishes = ["gold", "silver"];
 
 const CustomizeSection = () => {
   const [wood, setWood] = useState("Walnut");
   const [engraving, setEngraving] = useState("Your Name");
   const [ribbon, setRibbon] = useState("Gold");
+  const [finish, setFinish] = useState<"gold" | "silver">("gold");
   const [isLoading, setIsLoading] = useState(false);
 
   const handleCheckout = async () => {
     setIsLoading(true);
     try {
-      // 1. Load Stripe via the Publishable Key from Vite env
       const stripe = await loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY);
-
-      // 2. Call our secure Netlify Function
       const response = await fetch(getApiUrl('/create-checkout'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           productName: "The Custom Box",
-          price: 199, // Base price
+          price: 199,
           woodType: wood,
           engravingText: engraving,
           ribbonColor: ribbon,
-          imageUrl: "/sequence/frame_191_delay-0.041s.jpg", // Optional preview image
+          finish: finish,
+          imageUrl: "/sequence/frame_191_delay-0.041s.jpg",
         }),
       });
 
       const data = await response.json();
-
       if (data.url) {
         window.location.href = data.url;
       } else {
@@ -49,19 +49,20 @@ const CustomizeSection = () => {
   };
 
   return (
-    <section id="customize" className="relative bg-background py-24 sm:py-32 overflow-hidden">
-      {/* Ambient glow */}
-      <motion.div
-        className="absolute -left-40 top-1/3 h-[500px] w-[500px] rounded-full pointer-events-none"
-        animate={{
-          opacity: [0.03, 0.06, 0.03],
-          scale: [1, 1.1, 1],
-        }}
-        transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
-        style={{ background: "radial-gradient(circle, hsl(43 52% 54% / 0.1), transparent 70%)" }}
-      />
+    <section id="customize" className="relative bg-black py-24 sm:py-32 overflow-hidden min-h-[800px]">
+      {/* Dynamic GLSL Background */}
+      <div className="absolute inset-0 z-0 opacity-100">
+        <GLSLHills
+          speed={0.3}
+          cameraZ={140}
+          color={finish === 'gold' ? "hsl(43, 52%, 54%)" : "hsl(202, 10%, 80%)"}
+        />
+      </div>
 
-      <div className="container mx-auto px-6">
+      {/* Subtle overlay to ensure text readability */}
+      <div className="absolute inset-0 pointer-events-none z-[1]" />
+
+      <div className="container mx-auto px-6 relative z-10">
         <motion.div
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
@@ -94,7 +95,7 @@ const CustomizeSection = () => {
             transition={{ duration: 0.8, ease: [0.25, 0.46, 0.45, 0.94] }}
             className="flex items-center justify-center"
           >
-            <ProductPreview wood={wood} ribbon={ribbon} engraving={engraving} />
+            <ProductPreview wood={wood} ribbon={ribbon} engraving={engraving} finish={finish} />
           </motion.div>
 
           {/* Controls */}
@@ -123,6 +124,29 @@ const CustomizeSection = () => {
                       }`}
                   >
                     {w}
+                  </motion.button>
+                ))}
+              </div>
+            </div>
+
+            {/* Finish */}
+            <div>
+              <label className="mb-3 block font-body text-xs font-semibold uppercase tracking-widest text-muted-foreground">
+                Hardware Finish
+              </label>
+              <div className="flex gap-3">
+                {finishes.map((f) => (
+                  <motion.button
+                    key={f}
+                    onClick={() => setFinish(f as "gold" | "silver")}
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    className={`rounded-sm border px-5 py-2 font-body text-sm transition-all duration-300 ${finish === f
+                      ? "border-primary bg-primary text-primary-foreground gold-glow"
+                      : "border-border text-muted-foreground hover:border-primary/50"
+                      }`}
+                  >
+                    <span className="capitalize">{f}</span>
                   </motion.button>
                 ))}
               </div>

@@ -1,6 +1,7 @@
 import { motion, useScroll, useTransform } from "framer-motion";
 import { useRef } from "react";
 import { Link } from "react-router-dom";
+import { LampContainer } from "./ui/lamp";
 
 const collections = [
   {
@@ -26,33 +27,27 @@ const CollectionsSection = () => {
   const bgY = useTransform(scrollYProgress, [0, 1], [0, -60]);
 
   return (
-    <section id="collections" ref={ref} className="relative bg-charcoal py-24 sm:py-32 overflow-hidden">
-      {/* Floating ambient orb */}
-      <motion.div
-        style={{ y: bgY, background: "radial-gradient(circle, hsl(43 52% 54% / 0.05), transparent 70%)" }}
-        className="absolute -right-32 top-20 h-[400px] w-[400px] rounded-full pointer-events-none"
-      />
-
+    <section id="collections" ref={ref} className="relative bg-background py-24 sm:py-32 overflow-hidden">
       <div className="container mx-auto px-6">
-        <motion.div
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.8 }}
-          className="mb-16 text-center"
-        >
-          <motion.span
-            initial={{ opacity: 0, y: 10 }}
+        <LampContainer className="min-h-[400px] mb-8">
+          <motion.div
+            initial={{ opacity: 0, y: 100 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="mb-4 block font-body text-xs uppercase tracking-[0.3em] text-primary"
+            transition={{
+              delay: 0.3,
+              duration: 0.8,
+              ease: "easeInOut",
+            }}
+            className="text-center"
           >
-            Curated selections
-          </motion.span>
-          <h2 className="font-heading text-3xl font-light tracking-wide text-foreground sm:text-4xl lg:text-5xl">
-            Our <span className="text-gradient-gold">Collections</span>
-          </h2>
-        </motion.div>
+            <span className="mb-4 block font-body text-xs uppercase tracking-[0.3em] text-primary">
+              Curated selections
+            </span>
+            <h2 className="font-heading text-4xl font-light tracking-wide text-foreground sm:text-5xl lg:text-7xl">
+              Our <span className="text-gradient-gold">Collections</span>
+            </h2>
+          </motion.div>
+        </LampContainer>
 
         <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
           {collections.map((c, i) => (
@@ -63,7 +58,7 @@ const CollectionsSection = () => {
               viewport={{ once: true, margin: "-50px" }}
               transition={{ duration: 0.7, delay: i * 0.15, ease: [0.25, 0.46, 0.45, 0.94] }}
             >
-              <Link to="/shop" className="group relative block cursor-pointer overflow-hidden rounded-sm">
+              <Link to="/shop" className="group relative block cursor-pointer overflow-hidden">
                 <div className="aspect-[3/4] overflow-hidden">
                   <motion.img
                     src={c.image}

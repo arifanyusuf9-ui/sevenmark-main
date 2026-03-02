@@ -1,5 +1,6 @@
 import { motion, useScroll, useTransform } from "framer-motion";
 import { useRef } from "react";
+import { TextEffect } from "./ui/text-effect";
 
 const CraftStorySection = () => {
   const ref = useRef<HTMLElement>(null);
@@ -32,7 +33,7 @@ const CraftStorySection = () => {
               className="h-full w-full object-cover"
               preload="metadata"
             >
-              <source src="/assets/hero.mp4" type="video/mp4" />
+              <source src="/craft-hero.mp4" type="video/mp4" />
             </video>
             {/* Decorative frame */}
             <div className="absolute inset-0 border border-primary/20 rounded-sm pointer-events-none" />
@@ -42,44 +43,26 @@ const CraftStorySection = () => {
 
           {/* Copy */}
           <motion.div style={{ y: textY }}>
-            <motion.span
-              initial={{ opacity: 0, y: 10 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
+            <TextEffect
+              text="Our philosophy"
               className="mb-4 block font-body text-xs uppercase tracking-[0.3em] text-primary"
-            >
-              Our philosophy
-            </motion.span>
-            <motion.h2
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.8, delay: 0.1 }}
-              className="mb-6 font-heading text-3xl font-light tracking-wide text-foreground sm:text-4xl lg:text-5xl"
-            >
-              Behind the <span className="text-gradient-gold">Craft</span>
-            </motion.h2>
-            <motion.p
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.8, delay: 0.2 }}
-              className="mb-4 font-heading text-xl font-light italic text-muted-foreground"
-            >
-              "Each box takes 14 hours to craft. We don't rush legacy."
-            </motion.p>
-            <motion.p
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.8, delay: 0.3 }}
-              className="mb-8 font-body text-sm leading-relaxed text-muted-foreground"
-            >
-              From selecting the finest hardwoods to precision laser engraving, every SevenMark box
-              is a testament to patience, skill, and an unwavering pursuit of perfection. Our master
-              artisans bring decades of expertise to each piece, ensuring that what you hold in your
-              hands is not merely a box — but a legacy.
-            </motion.p>
+            />
+            <h2 className="mb-6 font-heading text-3xl font-light tracking-wide text-foreground sm:text-4xl lg:text-5xl">
+              <TextEffect text="Behind the " />
+              <TextEffect text="Craft" className="text-gradient-gold" />
+            </h2>
+            <TextEffect
+              text={`"Each box takes 14 hours to craft. We don't rush legacy."`}
+              className="mb-4 block font-heading text-xl font-light italic text-muted-foreground"
+              stagger={0.02}
+              delay={0.2}
+            />
+            <TextEffect
+              text="From selecting the finest hardwoods to precision laser engraving, every SevenMark box is a testament to patience, skill, and an unwavering pursuit of perfection. Our master artisans bring decades of expertise to each piece, ensuring that what you hold in your hands is not merely a box — but a legacy."
+              className="mb-8 block font-body text-sm leading-relaxed text-muted-foreground"
+              stagger={0.005}
+              delay={0.4}
+            />
             <motion.a
               href="#"
               initial={{ opacity: 0, y: 20 }}
