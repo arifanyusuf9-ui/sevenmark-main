@@ -61,9 +61,10 @@ const Navbar = () => {
       <div className="container mx-auto flex items-center justify-between px-6 py-4">
         <Link to="/" className="group flex items-center gap-2">
           <img
-            src="/logo.jpg"
+            src="/brand-logo.png"
             alt="SEVENMARK"
-            className="h-8 w-auto object-contain transition-transform duration-300 group-hover:scale-105"
+            className="h-6 sm:h-8 w-auto object-contain transition-transform duration-300 group-hover:scale-105"
+            style={{ mixBlendMode: 'screen' }}
           />
         </Link>
 

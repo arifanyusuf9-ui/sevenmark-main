@@ -12,7 +12,7 @@ const About = () => {
     }, []);
 
     return (
-        <main className="min-h-screen bg-background">
+        <main className="min-h-screen bg-background about-page-wrapper text-foreground">
             <Navbar />
             <AboutHero />
             <div className="relative z-10 bg-background">

@@ -25,9 +25,10 @@ const Footer = () => {
         >
           <Link to="/" className="mb-2 inline-block">
             <img
-              src="/logo.jpg"
+              src="/brand-logo.png"
               alt="SEVENMARK"
               className="h-6 w-auto object-contain transition-transform duration-300 hover:scale-105"
+              style={{ mixBlendMode: 'screen' }}
             />
           </Link>
           <p className="mb-8 font-body text-xs text-muted-foreground">

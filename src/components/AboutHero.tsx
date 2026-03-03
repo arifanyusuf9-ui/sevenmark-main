@@ -1,4 +1,4 @@
-import { motion, useScroll, useTransform } from "framer-motion";
+import { motion, useScroll, useTransform, useSpring } from "framer-motion";
 import { useRef } from "react";
 import { AboutCanvas } from "./AboutCanvas";
 import { TextEffect } from "./ui/text-effect";
@@ -10,15 +10,21 @@ const AboutHero = () => {
         offset: ["start start", "end end"],
     });
 
-    const opacity1 = useTransform(scrollYProgress, [0, 0.05, 0.15, 0.2], [0, 1, 1, 0]);
-    const opacity2 = useTransform(scrollYProgress, [0.25, 0.3, 0.45, 0.5], [0, 1, 1, 0]);
-    const opacity3 = useTransform(scrollYProgress, [0.55, 0.6, 0.75, 0.8], [0, 1, 1, 0]);
-    const opacity4 = useTransform(scrollYProgress, [0.85, 0.9, 0.98], [0, 1, 1]);
+    const smoothProgress = useSpring(scrollYProgress, {
+        stiffness: 80,
+        damping: 25,
+        restDelta: 0.001,
+    });
 
-    const yMove = useTransform(scrollYProgress, [0, 1], [0, -50]);
+    const opacity1 = useTransform(smoothProgress, [0, 0.05, 0.15, 0.2], [0, 1, 1, 0]);
+    const opacity2 = useTransform(smoothProgress, [0.25, 0.3, 0.45, 0.5], [0, 1, 1, 0]);
+    const opacity3 = useTransform(smoothProgress, [0.55, 0.6, 0.75, 0.8], [0, 1, 1, 0]);
+    const opacity4 = useTransform(smoothProgress, [0.85, 0.9, 0.98], [0, 1, 1]);
+
+    const yMove = useTransform(smoothProgress, [0, 1], [0, -50]);
 
     return (
-        <section ref={containerRef} className="relative min-h-[1000vh] bg-background">
+        <section ref={containerRef} className="relative min-h-[2000vh] md:min-h-[1000vh] bg-background">
             <AboutCanvas />
 
             <div className="sticky top-0 h-screen w-full flex items-center justify-center overflow-hidden pointer-events-none">

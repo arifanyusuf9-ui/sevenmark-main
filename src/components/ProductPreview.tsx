@@ -29,8 +29,10 @@ export const ProductPreview = ({
     className = "",
     size = 'default'
 }: ProductPreviewProps) => {
-    const dimensions = size === 'large' ? "h-96 w-[500px]" : "h-72 w-96";
-    const fontSize = size === 'large' ? "text-2xl" : "text-lg";
+    const dimensions = size === 'large'
+        ? "w-full max-w-[500px] aspect-[4/3] sm:h-96 sm:w-[500px]"
+        : "w-full max-w-[384px] aspect-[4/3] sm:h-72 sm:w-96";
+    const fontSize = size === 'large' ? "text-xl sm:text-2xl" : "text-base sm:text-lg";
 
     // Hardware color logic
     const hardwareColor = finish === 'gold' ? "hsl(43 52% 54%)" : "hsl(202 10% 80%)";
@@ -81,10 +83,13 @@ export const ProductPreview = ({
             {/* Brand Mark */}
             <div className="absolute bottom-4 right-4 z-20 overflow-hidden rounded-sm opacity-60 transition-opacity hover:opacity-90">
                 <img
-                    src="/logo.jpg"
+                    src="/brand-logo.png"
                     alt="Brand Mark"
-                    className="h-6 w-auto object-contain brightness-125"
-                    style={{ filter: finish === 'gold' ? 'none' : 'grayscale(1) brightness(1.5)' }}
+                    className="h-4 sm:h-6 w-auto object-contain"
+                    style={{
+                        filter: finish === 'gold' ? 'none' : 'grayscale(1) brightness(1.5)',
+                        mixBlendMode: 'screen'
+                    }}
                 />
             </div>
 

@@ -23,12 +23,10 @@ export const AboutCanvas = () => {
     useEffect(() => {
         let isCancelled = false;
         const loadImages = async () => {
-            const isMobile = window.innerWidth < 768;
-            const skipFactor = isMobile ? 2 : 1;
             const loadedImages = new Array(FRAME_COUNT);
 
             const promises = [];
-            for (let i = 0; i < FRAME_COUNT; i += skipFactor) {
+            for (let i = 0; i < FRAME_COUNT; i++) {
                 promises.push(new Promise((resolve) => {
                     const img = new Image();
                     // Using the new frame sequence location
@@ -77,10 +75,7 @@ export const AboutCanvas = () => {
             const mappedProgress = Math.min(1, progress / ANIMATION_END_PERCENTAGE);
 
             const rawFrameIndex = Math.floor(mappedProgress * FRAME_COUNT);
-            const isMobile = window.innerWidth < 768;
-            const skipFactor = isMobile ? 2 : 1;
-            const targetIndex = rawFrameIndex - (rawFrameIndex % skipFactor);
-            const frameIndex = Math.min(FRAME_COUNT - 1, targetIndex);
+            const frameIndex = Math.min(FRAME_COUNT - 1, rawFrameIndex);
 
             if (context && images[frameIndex]) {
                 const img = images[frameIndex];
@@ -107,7 +102,7 @@ export const AboutCanvas = () => {
     }, [images, smoothProgress, isLoading]);
 
     return (
-        <div ref={containerRef} className="absolute inset-0 h-[1000vh] w-full pointer-events-none z-0">
+        <div ref={containerRef} className="absolute inset-0 h-[2000vh] md:h-[1000vh] w-full pointer-events-none z-0">
             <div className="sticky top-0 h-screen w-full overflow-hidden flex items-center justify-center">
                 <canvas
                     ref={canvasRef}

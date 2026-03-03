@@ -102,6 +102,17 @@
     background: hsl(43 52% 54% / 0.3);
     color: hsl(202 18% 92%);
   }
+
+  /* About Page Custom Frame Matched Wrapper */
+  .about-page-wrapper,
+  .about-page-wrapper.bg-background,
+  .about-page-wrapper .bg-background {
+    background-color: #000 !important;
+  }
+
+  .about-page-wrapper .glass-nav {
+    background: rgba(0, 0, 0, 0.75) !important;
+  }
 }
 
 @layer components {

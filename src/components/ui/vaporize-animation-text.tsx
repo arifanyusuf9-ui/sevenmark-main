@@ -35,6 +35,7 @@ type VaporizeAnimationTextProps = {
     color?: string
     textX?: number | string
     textY?: number | string
+    textAlign?: 'left' | 'center' | 'right'
 }
 
 export function VaporizeAnimationText({
@@ -46,6 +47,7 @@ export function VaporizeAnimationText({
     color = 'rgb(255, 255, 255)',
     textX,
     textY,
+    textAlign = 'center',
 }: VaporizeAnimationTextProps) {
     const containerRef = useRef<HTMLDivElement>(null)
     const canvasRef = useRef<HTMLCanvasElement>(null)
@@ -115,7 +117,7 @@ export function VaporizeAnimationText({
             ctx.clearRect(0, 0, canvas.width, canvas.height)
             ctx.fillStyle = config.color
             ctx.font = `${config.font.fontWeight} ${config.font.fontSize} ${config.font.fontFamily}`
-            ctx.textAlign = 'left'
+            ctx.textAlign = textAlign
             ctx.textBaseline = 'middle'
             const { x, y } = getTextCoords(canvas.width, canvas.height)
             ctx.fillText(text, x, y)
